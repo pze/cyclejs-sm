@@ -1,0 +1,65 @@
+{
+  "name": "@cycle/isolate",
+  "version": "2.1.0",
+  "description": "A utility function to make scoped dataflow components in Cycle.js",
+  "license": "MIT",
+  "homepage": "https://cycle.js.org",
+  "bugs": "https://github.com/cyclejs/cyclejs/issues",
+  "contributors": [
+    {
+      "name": "Andre Staltz",
+      "email": "andre@staltz.com"
+    },
+    {
+      "name": "Tylor Steinberger",
+      "email": "tlsteinberger167@gmail.com"
+    }
+  ],
+  "repository": "https://github.com/cyclejs/cyclejs/tree/master/packages/isolate",
+  "keywords": [
+    "reactive",
+    "framework",
+    "rxjs",
+    "rx",
+    "unidirectional",
+    "mvi",
+    "dataflow",
+    "virtual-dom"
+  ],
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "types": "lib/index.d.ts",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/mocha": "2.2.x",
+    "@types/node": "7.0.x",
+    "@types/sinon": "1.16.x",
+    "rxjs": "5.1.0"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "lint": "../node_modules/.bin/tslint --config ../tslint.json --project tsconfig.json",
+    "mocha": "../node_modules/.bin/mocha test/*.ts --require ts-node/register",
+    "test": "npm run lint && npm run lib && npm run mocha",
+    "test-ci": "npm run test",
+    "browserify": "../node_modules/.bin/browserify lib/index.js --standalone CycleIsolate --outfile dist/cycle-isolate.js",
+    "uglify": "../node_modules/.bin/uglifyjs dist/cycle-isolate.js -o dist/cycle-isolate.min.js",
+    "predist": "rm -rf dist/ && mkdir -p dist/",
+    "dist": "npm run lib && npm run browserify && npm run uglify",
+    "docs": "node ../.scripts/make-api-docs.js ${PWD##*/}",
+    "prelib": "rm -rf lib/ && mkdir -p lib",
+    "lib": "../node_modules/.bin/tsc",
+    "preversion": "npm test",
+    "version": "npm run dist && npm run docs && npm run changelog",
+    "postversion": "git add -A && git commit -m \"release(${PWD##*/}): v$(cat package.json | ../node_modules/.bin/jase version)\" && git push origin master && npm publish",
+    "release-patch": "false",
+    "release-minor": "npm --no-git-tag-version version minor",
+    "release-major": "npm --no-git-tag-version version major",
+    "changelog": "node ../.scripts/update-changelogs.js ${PWD##*/}"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
